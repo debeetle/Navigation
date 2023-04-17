@@ -7,10 +7,11 @@ html, body {
 }
 #background {
     position: relative;
-    width: 780px;
+    <!-- width: 780px; -->
+    <!-- height: 725px; -->
+    width: 100%;
     height: 725px;
     margin: 0 auto;
-    background-image: url("http://test.fourwings.kr/applewatch/applewatch.png");
     background-size: contain;
     background-repeat: no-repeat;
     text-align: center;
@@ -19,16 +20,18 @@ html, body {
     position: absolute;
     left: 204px;
     top: 127px;
-    width: 375px;
-    height: 470px;
+    width: 100%;
+    height: 800px;
     background-color: black;
 }
 #watch {
     position: absolute;
     left: 204px;
     top: 127px;
-    width: 375px;
-    height: 470px;
+    width: 100%;
+    height: 800px;
+    <!-- width: 375px; -->
+    <!-- height: 470px; -->
 
     -moz-user-select: -moz-none;
     -khtml-user-select: none;
@@ -44,6 +47,8 @@ html, body {
             <svg id="watch" viewBox="-1.855 -2.325 3.75 4.7"></svg>
         </div>
 
+    <!-- width: 375px; -->
+    <!-- height: 470px; -->
     </body>
     <script type="text/javascript">
 function sumCoord(coord1, coord2) {
@@ -111,7 +116,7 @@ function AppCircle(_name, _parentMap) {
 	this.appName = _name;
 	this.radius = 0.33;
 	this.coord = [];
-	this.color = this.getRandomColor();
+    this.color = this.getRandomColor();
 }
 
 AppCircle.prototype = {
@@ -170,21 +175,21 @@ AppCircle.prototype = {
 		this.element.setAttribute("r", newRad);
 	},
 	// http://stackoverflow.com/a/1484514
-	getRandomColor: function() {
-		var letters = '0123456789ABCDEF'.split('');
-		var color = '#';
-		for (var i = 0; i < 6; i++ ) {
-			color += letters[Math.floor(Math.random() * 16)];
-		}
-		// avoid too-dark color
-		var count = 0;
-		for (var i = 1; i <= 3; i++) {
-			if (color[i] < '4')
-				count ++;
-		}
-		if (count == 3) return this.getRandomColor()
-		return color;
-	},
+    getRandomColor: function() {
+        var letters = '0123456789ABCDEF'.split('');
+        var color = '#';
+        for (var i = 0; i < 6; i++ ) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        // avoid too-dark color
+        var count = 0;
+        for (var i = 1; i <= 3; i++) {
+            if (color[i] < '4')
+                count ++;
+        }
+        if (count == 3) return this.getRandomColor()
+        return color;
+    },
 	isSentinel: function() {
 		if (this.appName == "sentinel") return true;
 		else return false;
@@ -229,7 +234,7 @@ Hexagon.prototype = {
 		var dir = Math.floor(Math.random() * 6);
 		var nearApps = parent.getNearAppsWithDir(dir);
 		
-		// 인접 앱이 풀방일 경우 재귀적으로 선택
+		// 递归选择相邻应用程序是否已满房间
 
 		while (!this.listContainsSentinel(nearApps)) {
 			var ridx = Math.floor(Math.random() * 3);
@@ -242,8 +247,8 @@ Hexagon.prototype = {
 			nearApps = parent.getNearAppsWithDir(dir);
 		}
 
-		// 풀방이지 않은 앱을 찾은 경우
-		// newApp에 대한 정보 설정
+		// 如果您发现一个应用程序不是一个完整的房间
+		// 为newApp设置信息
 		newApp.coord = (function(){
 			var allNearApps = parent.getNearAppsWithDir(dir);
 			var idx = dir + this.indexOfSentinel(allNearApps) - 1;
@@ -252,7 +257,7 @@ Hexagon.prototype = {
 			return sumCoord(parent.coord, diff);
 		}.bind(this)());
 
-		// 주변 Sentinel 설정
+		// 环境哨兵设置
 		nearApps = newApp.getNearApps();
 		for (var i = 0; i < nearApps.length; i++) {
 			var nearApp = nearApps[i];
@@ -263,7 +268,7 @@ Hexagon.prototype = {
 			}
 		}
 
-		// Map에 앱 위치 등록
+		// 在地图上注册应用位置
 		this.apps[newApp.coord.toString()] = newApp;
 
 	},
@@ -302,7 +307,7 @@ function Display(_element, _map) {
 
 	this.runningApp = null;
 
-	// scale : 좌표상의 1을 몇 픽셀로 그릴 것인가
+	// scale : 1在坐标上画多少像素
 	this.scale = 100;
 	this.maxScale = 100;
 	this.minScale = 60;
@@ -332,17 +337,17 @@ Display.prototype = {
 		eCircle.setAttribute("cy", circlePos[1]);
 		eCircle.setAttribute("r", circle.radius);
 		eCircle.setAttribute("fill", circle.color);
-		// eCircle.addEventListener("click", this.clickCircle.bind(this, circle));
+        <!-- // eCircle.addEventListener("click", this.clickCircle.bind(this, circle)); -->
 		
 		this.element.appendChild(eCircle);
 
-		// var eText = document.createElementNS("http://www.w3.org/2000/svg", "text");
-		// eText.textContent = circle.coord.toString();
-		// eText.setAttribute("x", circlePos[0]-0.3);
-		// eText.setAttribute("y", circlePos[1]);
-		// eText.setAttribute("font-size", 0.2);
-		// eText.setAttribute("fill", "red");
-		// this.element.appendChild(eText);
+        <!-- // var eText = document.createElementNS("http://www.w3.org/2000/svg", "text"); -->
+        <!-- // eText.textContent = circle.coord.toString(); -->
+        <!-- // eText.setAttribute("x", circlePos[0]-0.3); -->
+        <!-- // eText.setAttribute("y", circlePos[1]); -->
+        <!-- // eText.setAttribute("font-size", 0.2); -->
+        <!-- // eText.setAttribute("fill", "red"); -->
+        <!-- // this.element.appendChild(eText); -->
 		return eCircle;
 	},
 
@@ -396,54 +401,7 @@ Display.prototype = {
 		this._setViewBox(newViewBox);
 		this.refresh();
 	},
-
-	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-	// Functions For ClickModule
-	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-
-	clicked: function(pos) {
-		if (this.interactionEnabled == false || this.clickEnabled == false) return;
-		if (this.runningApp != null) {
-			this.closeApp();
-			return;
-		}
-		var viewBox = this._getViewBox();
-		var clickedPos = [viewBox[0] + pos[0] / this.scale, viewBox[1] + pos[1] / this.scale];
-		var clickedCoord = this.getCoordFromPos(clickedPos);
-		var clickedCircle = this.getCircleAtCoord(clickedCoord);
-
-		if (clickedCircle == this.currentCenter) {
-			if (this.runningApp == null) this.openApp(clickedCircle);
-			return;
-		}
-		if (clickedCircle.isSentinel() || clickedCircle == undefined) {
-			var nearCircle = this.getNearCircle(clickedPos);
-			if (nearCircle == this.currentCenter) {
-				currentAnimationModule.reset();
-				currentAnimationModule = null;
-				return;
-			}
-			clickedCircle = nearCircle;
-		}
-		
-		this.snapCenterTo(clickedCircle);
-	},
-
-	getNearCircle: function(pos) {
-		var centerPos = this.currentCenter.getPosition();
-		var diff = subCoord(centerPos, pos);
-
-		for (var r = 0; r < 1; r += 0.05) {
-			var guessPos = sumCoord(pos, [diff[0] * r, diff[1] * r]);
-			var guessCoord = this.getCoordFromPos(guessPos);
-			var guessCircle = this.getCircleAtCoord(guessCoord);
-			if (guessCircle.isSentinel() || guessCircle == undefined) continue;
-			else return guessCircle;
-		}
-		return this.currentCenter;
-	},
-
-	snapCenter: function() {
+            snapCenter: function() {
 		this.snapCenterTo(this.currentCenter);
 	},
 
@@ -468,126 +426,29 @@ Display.prototype = {
 			animationTime = getDist(centerPos, circlePos) * 400;
 			if (animationTime == 0) animationTime = 400;
 		}
-		progress = (timestamp - start) / animationTime;
+        progress = (timestamp - start) / animationTime;
 
-		// 변화될 상태 계산
-		var newx = startState[0] + (x - startState[0]) * progress;
-		var newy = startState[1] + (y - startState[1]) * progress;
+        // 변화될 상태 계산
+        var newx = startState[0] + (x - startState[0]) * progress;
+        var newy = startState[1] + (y - startState[1]) * progress;
 
-		this._setViewBox([newx, newy, startState[2], startState[3]]);
-		this.refresh();
+        this._setViewBox([newx, newy, startState[2], startState[3]]);
+        this.refresh();
 
-		if (progress < 1) {
-			window.requestAnimationFrame(this.snapAnimation.bind(this, circle));
-		} else {
-			start = null;
-			startState = null;
-			this.interactionEnabled = true;
-			animationTime = 0;
-			// 클릭 이벤트리스너 복구
-			if (currentAnimationModule != null)
-				currentAnimationModule.reset();
-			// circle.element.addEventListener("click", this.clickCircle.bind(this, circle));
-		}
+        if (progress < 1) {
+            window.requestAnimationFrame(this.snapAnimation.bind(this, circle));
+        } else {
+            start = null;
+            startState = null;
+            this.interactionEnabled = true;
+            animationTime = 0;
+            // 클릭 이벤트리스너 복구
+            if (currentAnimationModule != null)
+                currentAnimationModule.reset();
+            // circle.element.addEventListener("click", this.clickCircle.bind(this, circle));
+        }
 	},
 
-	openApp: function(circle) {
-		this.interactionEnabled = false;
-
-		var eRect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
-		var circleCenter = circle.getTunedPosition();
-		var width = 0.6 * 2 * circle.radius;
-		var height = 0.75 * 2 * circle.radius;
-
-		eRect.setAttribute("x", circleCenter[0] - width/2);
-		eRect.setAttribute("y", circleCenter[1] - height/2);
-		eRect.setAttribute("width", width);
-		eRect.setAttribute("height", height);
-		eRect.setAttribute("fill", circle.getRandomColor());
-		eRect.setAttribute("opacity", 0);
-		
-		this.element.appendChild(eRect);
-
-		window.requestAnimationFrame(this.openAppAnimation.bind(this, eRect));
-	},
-
-	openAppAnimation: function(appRect, timestamp) {
-		var progress;
-		if (start === null) start = timestamp;
-		progress = (timestamp - start) / 2000;
-
-		// Start State
-		if (startState === null) startState = this._getViewBox();
-		// Goals
-		var x = appRect.getAttribute("x");
-		var y = appRect.getAttribute("y");
-		var w = appRect.getAttribute("width");
-		var h = appRect.getAttribute("height");
-
-		// 변화될 상태 계산
-		var newx = startState[0] + (x - startState[0]) * progress;
-		var newy = startState[1] + (y - startState[1]) * progress;
-		var neww = startState[2] + (w - startState[2]) * progress;
-		var newh = startState[3] + (h - startState[3]) * progress;
-
-		this._setViewBox([newx, newy, neww, newh]);
-		appRect.setAttribute("opacity", progress);
-
-		if (progress < 1) {
-			window.requestAnimationFrame(this.openAppAnimation.bind(this, appRect));
-		} else {
-			start = null;
-			startState = null;
-			this.interactionEnabled = true;
-			this.dragEnabled = false;
-			this.zoomEnabled = false;
-			if (currentAnimationModule != null)
-				currentAnimationModule.reset();
-			this.runningApp = appRect;
-		}
-	}, 
-
-	closeApp: function() {
-		this.interactionEnabled = false;
-		this.refresh();
-		window.requestAnimationFrame(this.closeAppAnimation.bind(this, this.runningApp));
-		this.setCandidatesForCenter(this.getCandidatesForCenter());
-	}, 
-
-	closeAppAnimation: function(appRect, timestamp) {
-		var progress;
-		if (start === null) start = timestamp;
-		progress = (timestamp - start) / 2000;
-
-		// Start State
-		if (startState === null) startState = this._getViewBox();
-		// Goals
-		var centerPos = this.currentCenter.getPosition();
-		var goal = [centerPos[0] - this.width / this.scale / 2, centerPos[1] - this.height / this.scale / 2, this.width/this.scale, this.height/this.scale];
-
-		// 변화될 상태 계산
-		var newx = startState[0] + (goal[0] - startState[0]) * progress;
-		var newy = startState[1] + (goal[1] - startState[1]) * progress;
-		var neww = startState[2] + (goal[2] - startState[2]) * progress;
-		var newh = startState[3] + (goal[3] - startState[3]) * progress;
-		
-		this._setViewBox([newx, newy, neww, newh]);
-		appRect.setAttribute("opacity", 1-progress);
-
-		if (progress < 1) {
-			window.requestAnimationFrame(this.closeAppAnimation.bind(this, appRect));
-		} else {
-			start = null;
-			startState = null;
-			this.element.removeChild(appRect);
-			this.interactionEnabled = true;
-			this.zoomEnabled = true;
-			this.dragEnabled = true;
-			this.runningApp = null;
-			if (currentAnimationModule != null)
-				currentAnimationModule.reset();
-		}
-	},
 
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	// Refresh Functions
@@ -713,15 +574,15 @@ Display.prototype = {
 		return ltwh.map(function(str){return parseFloat(str)});
 	},
 	_setViewBox: function(newViewBox) {
-		// var curViewBox = this._getViewBox();
-		// var move = [newViewBox[0] - curViewBox[0], newViewBox[1] - curViewBox[1]];
-		// var idx = this.moveToCoordIdx(move[0], move[1]);
-		// this.movingDir = idx;
+        <!-- // var curViewBox = this._getViewBox(); -->
+        <!-- // var move = [newViewBox[0] - curViewBox[0], newViewBox[1] - curViewBox[1]]; -->
+        <!-- // var idx = this.moveToCoordIdx(move[0], move[1]); -->
+        <!-- // this.movingDir = idx; -->
 		this.element.setAttribute("viewBox", newViewBox.join(" "));
 	},
 
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-	// get Center
+    <!-- // get Center -->
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	getCircleAtCenterOfDisplay: function() {
 		var centerPos = this.getDisplayCenter();
@@ -810,33 +671,6 @@ Display.prototype = {
 
 }
 
-function ClickModule(_display) {
-	this.display = _display;
-	this.displayElement = _display.element;
-
-	this.clickFunctionCaches = {
-		click: this.click.bind(this),
-	};
-}
-
-ClickModule.prototype = {
-	constructor: ClickModule,
-	setClickable: function() {
-		this.displayElement.addEventListener("click", this.clickFunctionCaches.click);
-	},
-	click: function(e) {
-		if (dragFlag == true) return;
-		this.displayElement.removeEventListener("click", this.clickFunctionCaches.click);
-		if (currentAnimationModule == null) currentAnimationModule = this;
-		var clickedPos = [e.offsetX, e.offsetY];
-		this.display.clicked(clickedPos);
-	},
-	reset: function() {
-		this.setClickable();
-		currentAnimationModule = null;
-	}
-}
-
 function DragModule(_display) {
 	this.lastMousePos = [];
 	this.display = _display;
@@ -897,35 +731,35 @@ DragModule.prototype = {
 	}
 }
 
-<!-- var ZoomModule = function(_display) { -->
-<!--     this.display = _display; -->
-<!--     this.scale = 100; -->
-<!--     this.wheelFunctionCaches = { -->
-<!--         zoom: this.zoom.bind(this) -->
-<!--     }; -->
-<!-- } -->
-<!--  -->
-<!-- ZoomModule.prototype = { -->
-<!--     constructor: ZoomModule, -->
-<!--     zoom: function(e) { -->
-<!--         if (!this.display.zoomEnabled) return; -->
-<!--         var delta = e.wheelDelta / 120; -->
-<!--         if (this.disableZoomOut && delta < 0 || this.disableZoomIn && delta > 0) -->
-<!--             return; -->
-<!--         this.scale += delta; -->
-<!--          -->
-<!--         if (this.scale >= this.display.maxScale) { -->
-<!--             this.scale = this.display.maxScale; -->
-<!--         } else if (this.scale < this.display.minScale) { -->
-<!--             this.scale = this.display.minScale; -->
-<!--         } -->
-<!--         console.log(this.scale); -->
-<!--         this.display.setScale(this.scale); -->
-<!--     }, -->
-<!--     setZoomable: function() { -->
-<!--         this.display.element.addEventListener("mousewheel", this.wheelFunctionCaches.zoom, false); -->
-<!--     } -->
-<!-- } -->
+var ZoomModule = function(_display) {
+    this.display = _display;
+    this.scale = 100;
+    this.wheelFunctionCaches = {
+        zoom: this.zoom.bind(this)
+    };
+}
+
+ZoomModule.prototype = {
+    constructor: ZoomModule,
+    zoom: function(e) {
+        if (!this.display.zoomEnabled) return;
+        var delta = e.wheelDelta / 120;
+        if (this.disableZoomOut && delta < 0 || this.disableZoomIn && delta > 0)
+            return;
+        this.scale += delta;
+
+        if (this.scale >= this.display.maxScale) {
+            this.scale = this.display.maxScale;
+        } else if (this.scale < this.display.minScale) {
+            this.scale = this.display.minScale;
+        }
+        console.log(this.scale);
+        this.display.setScale(this.scale);
+    },
+    setZoomable: function() {
+        this.display.element.addEventListener("mousewheel", this.wheelFunctionCaches.zoom, false);
+    }
+}
 
 var start = null;
 var startState = null;
@@ -943,14 +777,11 @@ window.onload = function() {
 	display = new Display(svg, hex);
 	display.draw();
 
-	var click = new ClickModule(display);
-	click.setClickable();
-
 	var drag = new DragModule(display);
 	drag.setDraggable();
 	
-	<!-- var zoom = new ZoomModule(display); -->
-	<!-- zoom.setZoomable(); -->
+    var zoom = new ZoomModule(display);
+    zoom.setZoomable();
 }
     </script>
 </html>
