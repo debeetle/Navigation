@@ -7,10 +7,10 @@
     <title>test</title>
     <style>
         .main {
-            margin: 4em 20% 4em 20%;
+            margin: 5vw 20vw 5vw 20vw;
             display: flex;
             justify-content: center;
-            --r: 200px;
+            --r: 100px;
         }
 
         .container {
@@ -20,10 +20,14 @@
         .container div {
             display: inline-block;
             width: var(--r);
-            aspect-ratio: 1;
+            height: var(--r);
             clip-path: circle(50%);
-            background: lightblue;
+            background: orange;
             margin-bottom: calc((1.732050808 - 2) * var(--r) / 2);
+        }
+
+        .container div:nth-child(even) {
+            background: green;
         }
 
         .leftmargin {
