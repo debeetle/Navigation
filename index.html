@@ -22,7 +22,11 @@
             display: inline-block;
             width: var(--r);
             height: var(--r);
-            clip-path: circle(50%);
+            /*clip-path: circle(50%);*/
+            /*border: 0px solid red;*/
+            /* 边框颜色和宽度 */
+            border-radius: 50%;
+            /* 圆形边框 */
             background: orange;
             margin-bottom: calc((1.732050808 - 2) * var(--r) / 2);
             flex-shrink: 0;
@@ -38,6 +42,12 @@
 
         .rightmargin {
             margin-right: calc(var(--r)/2);
+        }
+
+        @media(prefers-color-scheme: dark) {
+            body {
+                background-color: rgb(25, 26, 27);
+            }
         }
     </style>
 </head>
