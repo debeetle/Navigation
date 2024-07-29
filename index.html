@@ -7,14 +7,15 @@
     <title>test</title>
     <style>
         .main {
-            margin: 5vw 20vw 5vw 20vw;
+            --r: 80px;
+            margin: calc(var(--r)/8) calc(var(--r)/8);
             display: flex;
             justify-content: center;
-            --r: 100px;
         }
 
         .container {
             font-size: 0;
+            /*background: greenyellow;*/
         }
 
         .container div {
@@ -24,6 +25,7 @@
             clip-path: circle(50%);
             background: orange;
             margin-bottom: calc((1.732050808 - 2) * var(--r) / 2);
+            flex-shrink: 0;
         }
 
         .container div:nth-child(even) {
@@ -81,44 +83,44 @@
             <div></div>
             <div></div>
             <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
+            <!--<div></div>-->
+            <!--<div></div>-->
+            <!--<div></div>-->
+            <!--<div></div>-->
+            <!--<div></div>-->
+            <!--<div></div>-->
+            <!--<div></div>-->
+            <!--<div></div>-->
+            <!--<div></div>-->
+            <!--<div></div>-->
+            <!--<div></div>-->
+            <!--<div></div>-->
+            <!--<div></div>-->
+            <!--<div></div>-->
+            <!--<div></div>-->
+            <!--<div></div>-->
+            <!--<div></div>-->
+            <!--<div></div>-->
+            <!--<div></div>-->
+            <!--<div></div>-->
+            <!--<div></div>-->
+            <!--<div></div>-->
+            <!--<div></div>-->
+            <!--<div></div>-->
+            <!--<div></div>-->
+            <!--<div></div>-->
 
         </div>
     </div>
 
     <script>
-        const element = document.querySelector('.main');
-        const computedStyle = window.getComputedStyle(element);
+        const bodybox = document.querySelector('.main');
+        const computedStyle = window.getComputedStyle(bodybox);
         const rString = computedStyle.getPropertyValue('--r');
         const rValue = parseFloat(rString);
         const container = document.getElementById("watch");
         const items = container.children;
-        function calculateNums() {
+        function reassign() {
             let nums = Math.floor(container.clientWidth / rValue);
             for (let i = 0; i < items.length; i++) {
                 items[i].classList.remove("leftmargin");
@@ -130,9 +132,10 @@
                     items[i].classList.add("rightmargin");
                 }
             }
+            container.style.paddingLeft = `${(container.clientWidth - nums * rValue) / 2}px`;
         }
-        calculateNums();
-        window.addEventListener("resize", calculateNums);
+        reassign();
+        window.addEventListener("resize", reassign);
     </script>
 
 </body>
