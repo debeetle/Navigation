@@ -4,13 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>test</title>
+    <title>navigation</title>
     <style>
         .main {
-            --r: 80px;
+            --r: 90px;
             margin: calc(var(--r)/8) calc(var(--r)/8);
             display: flex;
             justify-content: center;
+            flex-shrink: 0;
         }
 
         .container {
@@ -29,7 +30,6 @@
             /* 圆形边框 */
             background: orange;
             margin-bottom: calc((1.732050808 - 2) * var(--r) / 2);
-            flex-shrink: 0;
         }
 
         .container div:nth-child(even) {
@@ -93,33 +93,6 @@
             <div></div>
             <div></div>
             <div></div>
-            <!--<div></div>-->
-            <!--<div></div>-->
-            <!--<div></div>-->
-            <!--<div></div>-->
-            <!--<div></div>-->
-            <!--<div></div>-->
-            <!--<div></div>-->
-            <!--<div></div>-->
-            <!--<div></div>-->
-            <!--<div></div>-->
-            <!--<div></div>-->
-            <!--<div></div>-->
-            <!--<div></div>-->
-            <!--<div></div>-->
-            <!--<div></div>-->
-            <!--<div></div>-->
-            <!--<div></div>-->
-            <!--<div></div>-->
-            <!--<div></div>-->
-            <!--<div></div>-->
-            <!--<div></div>-->
-            <!--<div></div>-->
-            <!--<div></div>-->
-            <!--<div></div>-->
-            <!--<div></div>-->
-            <!--<div></div>-->
-
         </div>
     </div>
 
@@ -138,7 +111,7 @@
                 if (i % (2 * nums - 1) === 0) {
                     items[i].classList.add("leftmargin");
                 }
-                if ((i + 1 + nums) % (2 * nums - 1) === 0) {
+                if ((i + 1 + nums) % (2 * nums - 1) === 0 && items.length > nums) {
                     items[i].classList.add("rightmargin");
                 }
             }
