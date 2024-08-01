@@ -108,31 +108,42 @@
             init();
         });
 
-        window.addEventListener('mousemove', function (e) {
-            var posX = e.clientX - centerX;
-            var posY = e.clientY - centerY;
-            document.getElementById('holder').style.marginTop = posY + 'px';
-            document.getElementById('holder').style.marginLeft = posX + 'px';
-            size();
-        });
-
         let lastX = 0;
         let lastY = 0;
         let posX = 0;
         let posY = 0;
+        let isMouseDown = false;
+
+        window.addEventListener('mousedown', function (e) {
+            isMouseDown = true;
+        });
+        window.addEventListener('mouseup', function (e) {
+            isMouseDown = false;
+        });
+
+        window.addEventListener('mousemove', function (e) {
+            if (isMouseDown) {
+                posX += e.movementX;
+                posY += e.movementY;
+                document.getElementById('holder').style.marginTop = posY - centerY + 'px';
+                document.getElementById('holder').style.marginLeft = posX - centerX + 'px';
+                size();
+            }
+        });
+
 
         window.addEventListener('touchstart', function (e) {
             let touch = e.touches[0];
             lastX = touch.clientX;
             lastY = touch.clientY;
-        })
+        });
 
         window.addEventListener('touchmove', function (e) {
             let touch = e.touches[0];
             posX += touch.clientX - lastX;
             posY += touch.clientY - lastY;
-            lastX = touch.clientX
-            lastY = touch.clientY
+            lastX = touch.clientX;
+            lastY = touch.clientY;
             document.getElementById('holder').style.marginLeft = posX - centerX + 'px';
             document.getElementById('holder').style.marginTop = posY - centerY + 'px';
             size();
