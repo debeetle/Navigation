@@ -15,7 +15,6 @@
             position: absolute;
             height: 200vh;
             width: 200vw;
-            background-color: #212121;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
@@ -28,8 +27,14 @@
             height: 5vmin;
             width: 5vmin;
             border-radius: 50%;
-            background-color: blue;
+            /*background-color: blue;*/
             transform: translate(-50%, -50%);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: rgb(25, 26, 27);
+            }
         }
     </style>
 
@@ -40,7 +45,6 @@
 
     <script>
         var vmin, vmax, cols, rows, centerX, centerY, DistX, DistY, dots;
-
         var colors = ['#FF6045', '#FF8852', '#FFF486', '#92D43E', '#00BEF0', '#EA526F', '#FFF', '#018DE3'];
 
         function init() {
@@ -112,17 +116,30 @@
             size();
         });
 
-        window.addEventListener('touchmove', function (e) {
-            var touch = e.touches[0];
-            var posX = touch.clientX - centerX;
-            var posY = touch.clientY - centerY;
-            document.getElementById('holder').style.marginTop = posY + 'px';
-            document.getElementById('holder').style.marginLeft = posX + 'px';
-            size();
+        let lastX = 0;
+        let lastY = 0;
+        let posX = 0;
+        let posY = 0;
 
+        window.addEventListener('touchstart', function (e) {
+            let touch = e.touches[0];
+            lastX = touch.clientX;
+            lastY = touch.clientY;
+        })
+
+        window.addEventListener('touchmove', function (e) {
+            let touch = e.touches[0];
+            posX += touch.clientX - lastX;
+            posY += touch.clientY - lastY;
+            lastX = touch.clientX
+            lastY = touch.clientY
+            document.getElementById('holder').style.marginLeft = posX - centerX + 'px';
+            document.getElementById('holder').style.marginTop = posY - centerY + 'px';
+            size();
             // Prevent default scrolling
             e.preventDefault();
         }, {passive: false});
+
     </script>
 </body>
 
