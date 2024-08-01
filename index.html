@@ -6,187 +6,111 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>navigation</title>
     <style>
-        *,
-        *::before,
-        *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
         body {
-            position: fixed;
+            margin: 0;
             overflow: hidden;
-            height: 100vh;
-            width: 100vw;
         }
 
-        .wrapper {
-            --itemSize: calc(5rem + 5vw);
-            --responsiveness: 0.4;
-            --x: 0%;
-            --y: 0%;
-            --translateX: calc(-50% - var(--x) * var(--responsiveness));
-            --translateY: calc(-50% - var(--y) * var(--responsiveness));
-            transform: translate(var(--translateX), var(--translateY));
+        #holder {
+            position: absolute;
+            height: 200vh;
+            width: 200vw;
+            background-color: #212121;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        span {
             position: absolute;
             top: 50%;
             left: 50%;
-            display: grid;
-            justify-content: center;
-            font-size: var(--itemSize);
-            grid-template-columns: repeat(14, 0.5em);
-            grid-auto-rows: 0.5em;
-            grid-gap: 0 0.07em;
-            scroll-snap-type: mandatory;
-
-            .item {
-
-                &:first-of-type,
-                &:nth-of-type(34) {
-                    grid-column-start: 4;
-                }
-
-                &:nth-of-type(5),
-                &:nth-of-type(29) {
-                    grid-column-start: 3;
-                }
-
-                &:nth-of-type(10),
-                &:nth-of-type(23) {
-                    grid-column-start: 2;
-                }
-            }
-        }
-
-        .item {
-            --scale: 1;
-            grid-column-end: span 2;
-            grid-row-end: span 2;
-            height: 1em;
-            width: 1em;
+            height: 5vmin;
+            width: 5vmin;
             border-radius: 50%;
-            background-color: hsl(260, 100%, 60%);
-            will-change: transform;
-            transform: scale(var(--scale));
-            opacity: calc(var(--scale) * var(--scale));
-            transition: 0.4s ease-out;
-            scroll-snap-align: center;
-            box-shadow: 0 0 0.2em 0 rgba(0, 0, 0, 0.2);
-
-            &:hover {
-                background-color: hsl(260, 50%, 20%);
-            }
-        }
-
-        @media screen and (max-width: 1000px) {
-
-            body,
-            html {
-                position: relative;
-                overflow: scroll;
-                scroll-behavior: smooth;
-                -webkit-overflow-scrolling: touch;
-            }
-
-            .wrapper {
-                --itemSize: 10rem;
-                --responsiveness: 1;
-                position: static;
-                justify-content: start;
-                transform: scale(0.7);
-            }
+            background-color: blue;
+            transform: translate(-50%, -50%);
         }
     </style>
+
 </head>
 
 <body>
-    <div class="wrapper"></div>
+    <div id="holder"></div>
 
     <script>
-        for (let i = 0; i < 37; i++) {
-            const div = document.createElement('div');
-            div.classList.add('item');
-            document.querySelector('.wrapper').appendChild(div);
-        }
+        var vmin, vmax, cols, rows, centerX, centerY, DistX, DistY, dots;
 
-        const wrapper = document.querySelector(".wrapper");
-        const frameRate = 2;
-        const minScale = 0.3;
-        const maxScale = 1.1;
-        const scaleRange = maxScale - minScale;
-        let lastFrame;
+        var colors = ['#FF6045', '#FF8852', '#FFF486', '#92D43E', '#00BEF0', '#EA526F', '#FFF', '#018DE3'];
 
-        // this helper function stolen from a hero on stackoverflow
-        function dynamicSort(property) {
-            let sortOrder = 1;
+        function init() {
+            vmin = Math.min(window.innerHeight, window.innerWidth);
+            vmax = Math.max(window.innerHeight, window.innerWidth);
+            dots = 4;
+            cols = Math.ceil(document.getElementById('holder').clientWidth / vmin * dots) + 1;
+            rows = Math.ceil(document.getElementById('holder').clientHeight / vmin * dots * 2 / Math.sqrt(3)) + 1;
+            centerX = window.innerWidth / 2;
+            centerY = window.innerHeight / 2;
 
-            if (property[0] === "-") {
-                sortOrder = -1;
-                property = property.substr(1);
+            if (window.innerHeight > window.innerWidth) {
+                DistX = document.getElementById('holder').clientWidth / (cols - 1);
+                DistY = DistX / 2 * Math.sqrt(3);
+            } else {
+                DistY = document.getElementById('holder').clientHeight / (rows - 1);
+                DistX = DistY * 2 / Math.sqrt(3);
             }
 
-            return function (a, b) {
-                let result =
-                    a[property] < b[property] ? -1 : a[property] > b[property] ? 1 : 0;
-                return result * sortOrder;
-            };
-        }
+            // Remove all circles
+            var spans = document.querySelectorAll('#holder span');
+            spans.forEach(span => span.remove());
 
-        function animateChildren(parent, origin) {
-            const children = Array.from(parent.children);
-            const childrenWithDistances = [];
+            for (var m = 0; m < cols * rows; m++) { // create needed circles
+                var span = document.createElement('span');
+                document.getElementById('holder').appendChild(span);
+            }
 
-            children.map((child) => {
-                const r = child.getBoundingClientRect();
-                const childX = r.right - r.width / 2;
-                const childY = r.bottom - r.height / 2;
-                const distanceY = Math.max(origin.y, childY) - Math.min(origin.y, childY);
-                const distanceX = Math.max(origin.x, childX) - Math.min(origin.x, childX);
-                const hypot = Math.hypot(distanceX, distanceY);
-
-                child.distance = Math.round(hypot);
-                childrenWithDistances.push(child);
-            });
-
-            childrenWithDistances.sort(dynamicSort("distance")).reverse();
-
-            childrenWithDistances.map((child, index) => {
-                const relativeAmt = (index / children.length) * scaleRange;
-                child.style.setProperty("--scale", minScale + relativeAmt);
-            });
-        }
-
-        document.addEventListener("mousemove", function (e) {
-            requestAnimationFrame(function (thisFrame) {
-                if (thisFrame - lastFrame > frameRate) {
-                    const screenCenter = {
-                        x: window.innerWidth / 2,
-                        y: window.innerHeight / 2
-                    };
-                    const moveX = e.x - screenCenter.x;
-                    const moveY = e.y - screenCenter.y;
-
-                    wrapper.style.setProperty("--x", moveX / 10 + "%");
-                    wrapper.style.setProperty("--y", moveY / 10 + "%");
-
-                    animateChildren(wrapper, e);
+            var index = 0; // locate circles
+            for (var i = 0; i < cols; i++) { // iterate columns
+                for (var j = 0; j < rows; j++) { // iterate rows
+                    var span = document.querySelectorAll('#holder span')[index];
+                    if (j % 2 == 0) { // find rows to offset
+                        span.style.left = DistX * i + 'px';
+                        span.style.top = DistY * j + 'px';
+                    } else {
+                        span.style.left = DistX * i + (DistX / 2) + 'px';
+                        span.style.top = DistY * j + 'px';
+                    }
+                    span.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    span.style.position = 'absolute'; // Ensure spans are positioned
+                    index++;
                 }
+            }
+        }
 
-                lastFrame = thisFrame;
+        function size() {
+            var spans = document.querySelectorAll('#holder span');
+            spans.forEach(span => {
+                var rect = span.getBoundingClientRect();
+                var toCenter = Math.sqrt(Math.pow(rect.top + (rect.height / 2) - centerY, 2) + Math.pow(rect.left + (rect.width / 2) - centerX, 2));
+                span.style.height = (24 - (toCenter / vmax * 45)) + 'vmin';
+                span.style.width = (24 - (toCenter / vmax * 45)) + 'vmin';
             });
+        }
+
+        init();
+        size();
+
+        window.addEventListener('resize', function () {
+            init();
         });
 
-        document.body.addEventListener("scroll", function (e) {
-            const screenCenter = {
-                x: window.innerWidth / 2,
-                y: window.innerHeight / 2
-            };
-
-            animateChildren(wrapper, screenCenter);
+        window.addEventListener('mousemove', function (e) {
+            var posX = e.clientX - centerX;
+            var posY = e.clientY - centerY;
+            document.getElementById('holder').style.marginTop = posY + 'px';
+            document.getElementById('holder').style.marginLeft = posX + 'px';
+            size();
         });
-
-
     </script>
 </body>
 
