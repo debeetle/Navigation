@@ -111,6 +111,18 @@
             document.getElementById('holder').style.marginLeft = posX + 'px';
             size();
         });
+
+        window.addEventListener('touchmove', function (e) {
+            var touch = e.touches[0];
+            var posX = touch.clientX - centerX;
+            var posY = touch.clientY - centerY;
+            document.getElementById('holder').style.marginTop = posY + 'px';
+            document.getElementById('holder').style.marginLeft = posX + 'px';
+            size();
+
+            // Prevent default scrolling
+            //e.preventDefault();
+        }, {passive: false});
     </script>
 </body>
 
