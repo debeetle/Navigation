@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>navigation</title>
     <style>
         body {
@@ -18,6 +18,7 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
+            /*transition: 1s ease;*/
         }
 
         span {
@@ -29,6 +30,7 @@
             border-radius: 50%;
             /*background-color: blue;*/
             transform: translate(-50%, -50%);
+            /*transition: 0.1s all ease;*/
         }
 
         @media (prefers-color-scheme: dark) {
@@ -45,7 +47,7 @@
 
     <script>
         var vmin, vmax, cols, rows, centerX, centerY, DistX, DistY, dots;
-        var colors = ['#FF6045', '#FF8852', '#FFF486', '#92D43E', '#00BEF0', '#EA526F', '#FFF', '#018DE3'];
+        var colors = ['#FF6045', '#FF8852', 'pink', '#92D43E', '#00BEF0', '#EA526F', 'grey', '#018DE3'];
 
         function init() {
             vmin = Math.min(window.innerHeight, window.innerWidth);
@@ -106,6 +108,7 @@
 
         window.addEventListener('resize', function () {
             init();
+            size();
         });
 
         let lastX = 0;
@@ -115,6 +118,7 @@
         let isMouseDown = false;
 
         window.addEventListener('mousedown', function (e) {
+            size();
             isMouseDown = true;
         });
         window.addEventListener('mouseup', function (e) {
@@ -136,6 +140,7 @@
             let touch = e.touches[0];
             lastX = touch.clientX;
             lastY = touch.clientY;
+            size();
         });
 
         window.addEventListener('touchmove', function (e) {
